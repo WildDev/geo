@@ -21,7 +21,10 @@
 	<properties>
 		<java.version>20</java.version>
 		<caffeine.version>3.1.8</caffeine.version>
+		<opencsv.version>5.11</opencsv.version>
 		<project.profiles.active>default</project.profiles.active>
+		<wilddev.lib.core.ext.version>1.0.3.RELEASE</wilddev.lib.core.ext.version>
+		<wilddev.lib.web.ext.version>1.0.0.RELEASE</wilddev.lib.web.ext.version>
 	</properties>
 
 	<profiles>
@@ -66,11 +69,29 @@
 
 	<dependencies>
 
+		<!-- Default -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+
 		<!-- Custom -->
 		<dependency>
 			<groupId>fun.wilddev.lib</groupId>
+			<artifactId>spring-starter-core-ext</artifactId>
+			<version>${wilddev.lib.core.ext.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>fun.wilddev.lib</groupId>
 			<artifactId>spring-starter-web-ext</artifactId>
-			<version>1.0.0.RELEASE</version>
+			<version>${wilddev.lib.web.ext.version}</version>
+		</dependency>
+
+		<!-- Lib -->
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>${opencsv.version}</version>
 		</dependency>
 
 		<!-- Dev -->
