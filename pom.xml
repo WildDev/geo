@@ -16,7 +16,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 
 	<name>geo</name>
-	<description>Restful geolocation detector</description>
+	<description>Restful geographic service</description>
 
 	<properties>
 		<java.version>20</java.version>
