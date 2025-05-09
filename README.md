@@ -1,11 +1,12 @@
 ### Description
 
-Service that allows to detect a user location based on it's ip. Currently, is only integrated with [ipstack](https://ipstack.com)
+Geographic data related service. Currently, is only integrated with [ipstack](https://ipstack.com)
 
 [![Java CI with Maven](https://github.com/WildDev/geo/actions/workflows/maven.yml/badge.svg)](https://github.com/WildDev/geo/actions/workflows/maven.yml) [![Docker Image CI](https://github.com/WildDev/geo/actions/workflows/docker-image.yml/badge.svg)](https://github.com/WildDev/geo/actions/workflows/docker-image.yml)
 
 ### How it works
 
+##### Find user location based on its ip
 1. Configure proxy to set `X-Real-IP` header
 2. Route traffic to the service
 3. Send a request
@@ -25,6 +26,45 @@ curl "https://test.website/location" -H "X-Real-IP: 127.0.0.1" -v
     "city": "Dusseldorf"
 }
 ```
+
+##### Search locations manually with the autocomplete
+
+Use `q` request param to search predefined locations by a sample string. The search is performed in `startsWith` fashion on top of a qualifier with `city country` format:
+
+Example
+```cmd
+curl "https://test.website/location/list?q=Istanbul&20Turk" -v
+
+< HTTP/1.1 200 
+< Content-Type: application/json
+<
+[
+    {
+        "country": {
+            "code": "TR",
+            "name": "Turkey"
+        },
+        "city": "Istanbul"
+    },
+    {
+        "country": {
+            "code": "TR",
+            "name": "Turkey"
+        },
+        "city": "Istanbul Old Town"
+    },
+    {
+        "country": {
+            "code": "TR",
+            "name": "Turkey"
+        },
+        "city": "Istanbulbogazi"
+    }
+]
+```
+
+> [!WARNING]
+> The search is case sensitive
 
 ### Get started
 
