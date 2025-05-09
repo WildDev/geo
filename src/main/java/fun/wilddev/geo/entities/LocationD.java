@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.*;
 @ToString(exclude = "id")
 @CompoundIndex(name = "country.code_1_city_1", def = "{ 'country.code': 1, 'city': 1 }", unique = true)
 @Document("locations")
-public class Location {
+public class LocationD {
 
     @Id
     private String id;
@@ -29,7 +29,7 @@ public class Location {
     @Field
     private String qualifier;
 
-    public Location(@NonNull Country country, @NonNull String city) {
+    public LocationD(@NonNull Country country, @NonNull String city) {
 
         this.country = country;
         this.city = city;

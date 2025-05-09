@@ -1,6 +1,7 @@
 package fun.wilddev.geo.integrations.ipstack;
 
 import fun.wilddev.geo.exceptions.HttpRequestFailedException;
+import fun.wilddev.geo.interfaces.LocationFind;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -19,7 +20,7 @@ import org.springframework.web.client.*;
 @ConditionalOnProperty(name = "mode", havingValue = "ipstack", matchIfMissing = true)
 @Service
 @Slf4j
-public class IpStackHttp extends IpStackHttpService implements LocationDetector {
+public class IpStackHttp extends IpStackHttpService implements LocationFind {
 
     public IpStackHttp(@Value("${integration.ipstack.url}") String url,
                        @Value("${integration.ipstack.access-key}") String accessKey,
@@ -36,7 +37,7 @@ public class IpStackHttp extends IpStackHttpService implements LocationDetector 
     }
 
     @Override
-    public Location detect(@NonNull String ip) throws HttpRequestFailedException {
+    public Location find(@NonNull String ip) throws HttpRequestFailedException {
 
         try {
             ResponseEntity<IpStackLocationResponse> responseEntity = restTemplate

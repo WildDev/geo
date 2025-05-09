@@ -13,7 +13,7 @@ Geographic data related service. Currently, is only integrated with [ipstack](ht
 
 Example:
 ```cmd
-curl "https://test.website/location" -H "X-Real-IP: 127.0.0.1" -v
+curl "https://test.website/location/find" -H "X-Real-IP: 127.0.0.1" -v
 
 < HTTP/1.1 200
 < Content-Type: application/json
