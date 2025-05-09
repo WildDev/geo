@@ -1,5 +1,6 @@
 package fun.wilddev.geo.controllers;
 
+import fun.wilddev.geo.cache.LocationCache;
 import fun.wilddev.geo.controllers.responses.LocationResponse;
 import fun.wilddev.spring.web.controllers.AbstractController;
 
@@ -7,7 +8,6 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 
-import fun.wilddev.geo.services.*;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/location")
@@ -17,9 +17,9 @@ public class LocationController extends AbstractController {
 
     private final LocationCache locationCache;
 
-    @GetMapping
-    public ResponseEntity<?> detect(@RequestHeader("X-Real-IP") String ip) {
-        return locationCache.detect(ip).map(LocationResponse::new)
+    @GetMapping("/find")
+    public ResponseEntity<?> find(@RequestHeader("X-Real-IP") String ip) {
+        return locationCache.find(ip).map(LocationResponse::new)
                 .map(this::ok).orElse(notFound());
     }
 

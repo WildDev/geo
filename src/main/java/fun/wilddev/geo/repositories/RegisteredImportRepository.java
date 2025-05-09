@@ -1,11 +1,11 @@
 package fun.wilddev.geo.repositories;
 
-import fun.wilddev.geo.entities.RegisteredImport;
+import fun.wilddev.geo.entities.RegisteredImportD;
 import fun.wilddev.geo.enums.ImportType;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface RegisteredImportRepository extends MongoRepository<RegisteredImport, String> {
+public interface RegisteredImportRepository extends MongoRepository<RegisteredImportD, String> {
 
-    RegisteredImport findByType(ImportType type);
+    RegisteredImportD findByType(ImportType type);
 }

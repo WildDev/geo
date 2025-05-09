@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.*;
 @Getter
 @ToString
 @Document("registered_imports")
-public class RegisteredImport {
+public class RegisteredImportD {
 
     @Id
     private String id;
@@ -25,7 +25,7 @@ public class RegisteredImport {
     @Field
     private String elapsed;
 
-    public RegisteredImport(@NonNull ImportType type, @NonNull String elapsed) {
+    public RegisteredImportD(@NonNull ImportType type, @NonNull String elapsed) {
 
         this.type = type;
         this.elapsed = elapsed;

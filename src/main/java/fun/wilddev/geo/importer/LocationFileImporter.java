@@ -1,6 +1,6 @@
 package fun.wilddev.geo.importer;
 
-import fun.wilddev.geo.entities.Location;
+import fun.wilddev.geo.entities.LocationD;
 import fun.wilddev.geo.exceptions.FileReaderException;
 import fun.wilddev.geo.models.Country;
 import fun.wilddev.geo.repositories.LocationRepository;
@@ -55,7 +55,7 @@ public class LocationFileImporter implements Importer {
              CSVReader csv = getCsvReader(reader)) {
 
             String[] line;
-            List<Location> buff = new ArrayList<>(BUFF_SIZE);
+            List<LocationD> buff = new ArrayList<>(BUFF_SIZE);
 
             for (int i = 0; (line = csv.readNext()) != null; i++) {
 
@@ -74,7 +74,7 @@ public class LocationFileImporter implements Importer {
                         continue;
                     }
 
-                    Location location = new Location(new Country(line[1], line[0]), line[2]);
+                    LocationD location = new LocationD(new Country(line[1], line[0]), line[2]);
 
                     buff.add(location);
                     counter++;
