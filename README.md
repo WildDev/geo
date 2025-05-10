@@ -83,6 +83,7 @@ An example run:
 java -jar -Xmx256M target/geo.jar \
     --server.port=8000 \
     --spring.cors.allowed-origins=https://test.website \
+    --spring.data.mongodb.uri="mongodb+srv://geo:test@mongodb.example.com/geo?tls=true&authSource=admin&replicaSet=mongodb" \
     --integration.ipstack.url=https://api.ipstack.com \
     --integration.ipstack.access-key=723953e7b0e27c762c38213b7c71fd77
 ```
