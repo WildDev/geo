@@ -1,14 +1,20 @@
 package fun.wilddev.geo.controllers;
 
 import fun.wilddev.geo.cache.LocationCache;
-import fun.wilddev.geo.controllers.responses.LocationResponse;
 import fun.wilddev.spring.web.controllers.AbstractController;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.http.ResponseEntity;
 
+import fun.wilddev.geo.controllers.responses.*;
 import org.springframework.web.bind.annotation.*;
+
+@RegisterReflectionForBinding({
+        LocationResponse.class,
+        CountryResponse.class
+})
 
 @RequestMapping("/location")
 @RestController

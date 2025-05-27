@@ -6,6 +6,7 @@ import fun.wilddev.geo.interfaces.LocationFind;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,12 @@ import fun.wilddev.geo.models.*;
 import org.springframework.http.*;
 import org.springframework.lang.*;
 import org.springframework.web.client.*;
+
+@RegisterReflectionForBinding({
+        IpStackCountryResponse.class,
+        IpStackLocationResponse.class,
+        IpStackErrorResponse.class
+})
 
 @ConditionalOnProperty(name = "mode", havingValue = "ipstack", matchIfMissing = true)
 @Service
