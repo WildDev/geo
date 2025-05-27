@@ -72,7 +72,7 @@ Build requirements:
 * latest JDK and Maven
 
 Runtime stack:
-* Java 20+
+* Java 20+ (none for the GraalVM image version)
 * API credentials for [ipstack](https://ipstack.com)
 
 Checkout the project and build it using `mvn package` command

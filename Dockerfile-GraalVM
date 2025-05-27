@@ -1,0 +1,57 @@
+FROM maven:3.9.4-eclipse-temurin-20 as build
+
+MAINTAINER https://github.com/WildDev
+
+COPY . /
+RUN --mount=type=cache,target=$MAVEN_CONFIG mvn clean package -P native
+
+FROM ubuntu:24.10 as graalvm
+
+SHELL [ "/bin/bash", "-c" ]
+
+ARG dist=graalvm-jdk-24_linux-x64_bin.tar.gz
+ARG artifact_dir=/artifact/
+ARG graalvm_dir=/graalvm/
+
+ADD https://download.oracle.com/graalvm/24/latest/${dist} /
+
+RUN apt-get update && apt-get install -y build-essential zlib1g-dev unzip
+RUN mkdir ${graalvm_dir}
+RUN tar -xzvf ${dist} --strip=1 -C ${graalvm_dir}
+
+COPY --from=build /target/geo.jar ${artifact_dir}
+
+WORKDIR ${artifact_dir}geo
+
+RUN unzip ../geo.jar
+RUN ${graalvm_dir}/bin/native-image -H:-AddAllFileSystemProviders -cp BOOT-INF/classes:`find BOOT-INF/lib | tr '\n' ':'` --gc=G1 -o app
+
+FROM ubuntu:24.10
+
+ENV ALLOWED_ORIGINS=http://localhost
+ENV JAVA_OPTS='-Xms32M -Xmx256M'
+ENV INTEGRATION_IPSTACK_URL=http://api.ipstack.com
+ENV INTEGRATION_IPSTACK_ACCESS_KEY=ninja
+ENV MONGODB_HOST=mongodb
+ENV MONGODB_PORT=27017
+ENV MONGODB_DATABASE=geo
+ENV MONGODB_USER=geo
+ENV MONGODB_PASS=test
+ENV MONGODB_URI=''
+ENV SERVER_PORT=8080
+
+COPY --from=graalvm /artifact/geo/app /
+
+ENTRYPOINT /app \
+$JAVA_OPTS \
+ --integration.ipstack.url=$INTEGRATION_IPSTACK_URL \
+ --integration.ipstack.access-key=$INTEGRATION_IPSTACK_ACCESS_KEY \
+ --server.port=$SERVER_PORT \
+ --spring.cors.allowed-origins=$ALLOWED_ORIGINS \
+ --spring.data.mongodb.host=$MONGODB_HOST \
+ --spring.data.mongodb.port=$MONGODB_PORT \
+ --spring.data.mongodb.database=$MONGODB_DATABASE \
+ --spring.data.mongodb.username=$MONGODB_USER \
+ --spring.data.mongodb.password=$MONGODB_PASS \
+ --spring.data.mongodb.uri=$MONGODB_URI \
+$EXTRA_ARGS

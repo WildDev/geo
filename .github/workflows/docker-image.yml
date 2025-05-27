@@ -18,11 +18,18 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_PASS }}
-    - name: Build & Push
+    - name: Build & Push - default
       uses: docker/build-push-action@v6.16.0
       with:
+        file: ./Dockerfile
         tags: |
           wilddev/geo:${{ github.ref_name }}
           wilddev/geo:latest
         push: true
-  
+    - name: Build & Push - GraalVM
+      uses: docker/build-push-action@v6.16.0
+      with:
+        file: ./Dockerfile-GraalVM
+        tags: |
+          wilddev/geo:graalvm
+        push: true
