@@ -25,7 +25,6 @@ jobs:
         file: ./Dockerfile
         tags: |
           wilddev/geo:${{ github.ref_name }}
-          wilddev/geo:latest
         push: true
     - name: Build & Push - GraalVM
       uses: docker/build-push-action@v6.16.0
@@ -33,4 +32,5 @@ jobs:
         file: ./Dockerfile-GraalVM
         tags: |
           wilddev/geo:graalvm
+          wilddev/geo:latest
         push: true
