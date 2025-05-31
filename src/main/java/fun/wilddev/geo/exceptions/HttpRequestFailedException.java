@@ -1,6 +1,6 @@
 package fun.wilddev.geo.exceptions;
 
-public class HttpRequestFailedException extends Exception {
+public class HttpRequestFailedException extends RuntimeException {
 
     public HttpRequestFailedException(String message) {
         super(message);

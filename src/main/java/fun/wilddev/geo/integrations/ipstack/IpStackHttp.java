@@ -3,18 +3,18 @@ package fun.wilddev.geo.integrations.ipstack;
 import fun.wilddev.geo.exceptions.HttpRequestFailedException;
 import fun.wilddev.geo.interfaces.LocationFind;
 
+import java.util.Map;
+
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import fun.wilddev.geo.integrations.ipstack.api.*;
 import fun.wilddev.geo.models.*;
 
-import org.springframework.http.*;
 import org.springframework.lang.*;
 import org.springframework.web.client.*;
 
@@ -29,10 +29,8 @@ import org.springframework.web.client.*;
 @Slf4j
 public class IpStackHttp extends IpStackHttpService implements LocationFind {
 
-    public IpStackHttp(@Value("${integration.ipstack.url}") String url,
-                       @Value("${integration.ipstack.access-key}") String accessKey,
-                       RestTemplate restTemplate) {
-        super(url, accessKey, restTemplate);
+    public IpStackHttp(RestClient restClient) {
+        super(restClient);
     }
 
     private Country map(@Nullable IpStackCountryResponse response) {
@@ -47,32 +45,19 @@ public class IpStackHttp extends IpStackHttpService implements LocationFind {
     public Location find(@NonNull String ip) throws HttpRequestFailedException {
 
         try {
-            ResponseEntity<IpStackLocationResponse> responseEntity = restTemplate
-                    .getForEntity(url + "/{ip}?access_key={accessKey}", IpStackLocationResponse.class, ip, accessKey);
+            return restClient.get().uri("/{ip}?access_key={accessKey}",
+                    Map.of("ip", ip)).exchange((request, response) -> {
 
-            HttpStatusCode httpStatusCode = responseEntity.getStatusCode();
+                val source = response.bodyTo(IpStackLocationResponse.class);
 
-            if (httpStatusCode.is2xxSuccessful()) {
+                if (source.getSuccess() == Boolean.FALSE)
+                    throw new HttpRequestFailedException("Request rejected: " + source);
 
-                val response = responseEntity.getBody();
+                return map(source);
+            });
 
-                if (response == null)
-                    throw new HttpRequestFailedException("null response");
-
-                if (response.getSuccess() == Boolean.FALSE)
-                    throw new HttpRequestFailedException("Request rejected: " + response.getError());
-
-                return map(response);
-            }
-
-            throw new HttpRequestFailedException("Unhandled http code " + httpStatusCode);
-
-        } catch (RestClientException ex) {
-
-            if (ex instanceof HttpClientErrorException httpEx)
-                log.error("Response report: {}", httpEx.getResponseBodyAsString());
-
-            throw new HttpRequestFailedException("Request failed", ex);
+        } catch (Exception ex) {
+            throw new HttpRequestFailedException(ex.getMessage(), ex);
         }
     }
 }
