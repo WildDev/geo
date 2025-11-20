@@ -89,3 +89,16 @@ java -jar -Xmx256M target/geo.jar \
 ```
 
 Also available on [Docker Hub](https://hub.docker.com/r/wilddev/geo)
+
+### License
+
+*This project is licensed under the Apache License 2.0.*
+
+Dependencies:
+
+- Spring Boot (Apache 2.0)
+- Caffeine (Apache 2.0)
+- OpenCSV (Apache 2.0)
+- Lombok (MIT)
+
+See [LICENSE](LICENSE) and [NOTICE](NOTICE) files for details.
