@@ -24,6 +24,7 @@ COPY --from=build /target/geo.jar ${artifact_dir}
 WORKDIR ${artifact_dir}geo
 
 RUN unzip ../geo.jar
+RUN cp -r META-INF/native-image BOOT-INF/classes/META-INF/native-image
 RUN ${graalvm_dir}/bin/native-image -H:-AddAllFileSystemProviders -cp BOOT-INF/classes:`find BOOT-INF/lib | tr '\n' ':'` --gc=G1 -o app
 
 FROM ubuntu:24.10
