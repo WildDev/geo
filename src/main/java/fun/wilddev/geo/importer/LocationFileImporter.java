@@ -57,30 +57,34 @@ public class LocationFileImporter implements Importer {
             String[] line;
             List<LocationD> buff = new ArrayList<>(BUFF_SIZE);
 
-            for (int i = 0; (line = csv.readNext()) != null; i++) {
+            while ((line = csv.readNext()) != null) {
 
-                if (i % BUFF_SIZE == 0) {
+                if (line.length < 3) {
+
+                    log.debug("Bad entry, skipping ...");
+                    continue;
+                }
+
+                LocationD location = new LocationD(new Country(line[1], line[0]), line[2]);
+
+                buff.add(location);
+                counter++;
+
+                log.info("Location read: {}", location);
+
+                if (buff.size() >= BUFF_SIZE) {
 
                     locationRepository.saveAll(buff);
                     buff.clear();
 
                     log.debug("Flushed");
-
-                } else {
-
-                    if (line.length < 3) {
-
-                        log.debug("Bad entry, skipping ...");
-                        continue;
-                    }
-
-                    LocationD location = new LocationD(new Country(line[1], line[0]), line[2]);
-
-                    buff.add(location);
-                    counter++;
-
-                    log.info("Location read: {}", location);
                 }
+            }
+
+            if (!buff.isEmpty()) {
+
+                locationRepository.saveAll(buff);
+                log.debug("Flushed remaining");
             }
 
         } catch (Exception ex) {
