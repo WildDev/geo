@@ -50,6 +50,9 @@ public class IpStackHttp extends IpStackHttpService implements LocationFind {
 
                 val source = response.bodyTo(IpStackLocationResponse.class);
 
+                if (source == null)
+                    throw new HttpRequestFailedException("null response");
+
                 if (source.getSuccess() == Boolean.FALSE)
                     throw new HttpRequestFailedException("Request rejected: " + source);
 
